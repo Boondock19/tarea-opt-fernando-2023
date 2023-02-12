@@ -17,7 +17,7 @@ all: prompt
 # hashtable.o:
 # 	$(CC) $(CFLAGS) -o hashtable hashtable.h
 
-OBJETOS  = hashtable.o prompt.o
+OBJETOS  = linkedList.o hashtable.o prompt.o
 
 prompt: $(OBJETOS)
 	$(LINKEAR) $(OBJETOS) -o prompt
@@ -25,8 +25,11 @@ prompt: $(OBJETOS)
 prompt.o: prompt.c
 	$(CC) prompt.c -o prompt.o
 
-hashtable.o: hashtable.c hashtable.h
+hashtable.o: hashtable.c hashtable.h linkedList.h 
 	$(CC) hashtable.c -o hashtable.o
+
+linkedList.o: linkedList.c linkedList.h
+	$(CC) linkedList.c -o linkedList.o
 
 clean:
 	rm *.o prompt

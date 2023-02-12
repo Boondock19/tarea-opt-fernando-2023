@@ -44,6 +44,8 @@ HashItem* createHashItem(char* key,User* value) {
     item->key = (char*) malloc(strlen(key) + 1 );
     item->value = (User*) malloc(sizeof(User));
     strcpy(item->key, key);
+    value->tweets = createNode();
+    value->following = createNode();
     item->value = value;
     return item;
 }

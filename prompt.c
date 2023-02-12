@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "hashTable.h"
+#include "linkedList.h"
 #include "user.h"
+#include "tweet.h"
 
 #define CORRECT_EXIT 0
 #define INCORRECT_EXIT 1
@@ -24,12 +27,18 @@
 #define SIGNUP "signup\n"
 #define LEAVE "leave\n"
 
+#define NEW_TWEET_STATE 0
+#define GET_PROFILE_STATE 1
+#define FOLLOW_STATE 2
+#define LOGOUT_STATE 3
 
+#define NEW_TWEET "+\n"
+#define GET_PROFILE "@\n"
+#define FOLLOW "follow\n"
+#define LOGOUT "logout\n"
 
-
-
-int define_state(int state , char *input) {
-    if (strcmp(input, LOGIN) == 0) {
+int defineState(int state , char *input) {
+      if (strcmp(input, LOGIN) == 0) {
         state = LOGIN_STATE;
     } else if (strcmp(input, SIGNUP) == 0) {
         state = SIGNUP_STATE;
@@ -40,6 +49,23 @@ int define_state(int state , char *input) {
     } /*/
     return state;
 }
+
+int defineLoginInput(int loginState,char *input) {
+
+    if (strcmp(input, NEW_TWEET) == 0) {
+        loginState = NEW_TWEET_STATE;
+    } else if (strcmp(input, GET_PROFILE) == 0) {
+        loginState = GET_PROFILE_STATE;
+    } else if (strcmp(input, FOLLOW) == 0) {
+        loginState = FOLLOW_STATE;
+    } else if (strcmp(input, LOGOUT) == 0) {
+        loginState = LOGOUT_STATE;
+    }
+    return loginState;
+      
+}
+
+
 
 /* 
     Funcion para "Limpiar" el buffer al utilizar fgets
@@ -59,7 +85,9 @@ void clearfGetsBuffer(char *str) {
 int main (int argc, char *argv[]) {
 
     int state = INITIAL_STATE;
-    char state_input[10];
+    int loginInputState;
+    char stateInput[10];
+    char loginInput[7];
 
     /* Creamos la tabla de hash inicial*/
 
@@ -69,16 +97,34 @@ int main (int argc, char *argv[]) {
         
         char tempUsername[31];
         char tempPassword[13];
+        
+        /* 
+
+        time_t tempDate1;
+        time_t tempDate2 = time(NULL);
+
+        
+        printf("Date2: %s , %d \n", ctime(&tempDate2), tempDate2);
+        sleep(10);
+        tempDate1 = time(NULL);
+        printf("Date1: %s , %d \n", ctime(&tempDate1), tempDate1);
+
+        if (tempDate2 < tempDate1 ) {
+            printf("Date2 is less than Date1 \n");
+        } else {
+            printf("Date2 is greater than Date1 \n");
+        }
+        */
 
         switch (state)
         {
         case INITIAL_STATE:
             printf("Welcome to the prompt\n");
             printf("DON’T MISS WHAT’S HAPPENING! LOGIN, SIGNUP OR LEAVE\n");
-            fgets(state_input, 8, stdin);
-            printf("You entered: %s", state_input);
-            printf("Are they equal ? %d \n",strcmp(state_input, LOGIN));
-            state = define_state(state, state_input);
+            fgets(stateInput, 8, stdin);
+            printf("You entered: %s", stateInput);
+            printf("Are they equal ? %d \n",strcmp(stateInput, LOGIN));
+            state = defineState(state, stateInput);
             break;
         case LOGIN_STATE:
             printf("Login\n");
@@ -107,8 +153,68 @@ int main (int argc, char *argv[]) {
                 if(hashedPassword == userFound->password) {
                     printf("Password is correct lets print all tweets\n");
                     printf("WHAT’S HAPPENING? \n");
+                    fgets(loginInput,sizeof(loginInput),stdin);
+                    /* Definimos que accion quiere tomar el usuario .*/
+                    loginInputState = defineLoginInput(loginInputState, loginInput);
+                    
+
+                    switch (loginInputState)
+                    {
+                    case (NEW_TWEET_STATE):
+                        printf("Write your tweet: \n");
+                        /* Creamos espacio para el tweet y el texto */
+                        Tweet *newTweet = (Tweet *) malloc(sizeof(Tweet)); 
+                        printf("SI crea bien el espacio para newTweet \n");
+                        char *text = (char *) malloc(sizeof(char) * 280);
+                        printf("SI crea bien el espacio para text \n");
+                        fgets(text, sizeof(char) * 280, stdin);
+                        
+                        /* 
+                        printf("Tweet: %s \n", newTweet->text);
+                        printf(" Date: %s \n", ctime(&newTweet->date));
+                        printf(" User: %s \n", newTweet->user->username);
+                        */
+                       
+                       
+                        newTweet->user = userFound;
+                        newTweet->date = time(NULL);
+                        newTweet->text = text;
+                        
+                        printf("Tweet: %s , Date: %s , User: %s \n", newTweet->text, ctime(&newTweet->date), newTweet->user->username);
+                        
+                        /* head */
+                        /* 
+                        node *head = userFound->tweets;
+
+                        printf("Antes de insertar : \n");
+                        printList(head);
+                        */
+                        /* Lo agregamos a la lista de tweets */
+                        /* 
+                        insertNode(head, newTweet);
+                        printf("Despues de insertar : \n");
+                        printList(head);
+                        */
+                        /* SALTAR a state en login_state ??*/
+                        break;
+                    
+                    case (GET_PROFILE_STATE):
+                        /* code */
+                        break;
+                    
+                    case (FOLLOW_STATE):
+                        /* code */
+                        break;
+                    
+                    case (LOGOUT_STATE):
+                        break;
+                    
+                    default:
+                        break;
+                    }
                 } else {
                     printf("Password is incorrect\n");
+                    state = INITIAL_STATE;
                 }
 
             } else {
