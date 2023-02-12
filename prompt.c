@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "hashTable.h"
+#include "user.h"
 
 #define CORRECT_EXIT 0
 #define INCORRECT_EXIT 1
@@ -67,6 +69,16 @@ int main (int argc, char *argv[]) {
             printf("You entered: %s", state_input);
             printf("Are they equal ? %d \n",strcmp(state_input, LEAVE));
             state = define_state(state, state_input);
+            User* newUser = (User *) malloc(sizeof(User));
+            newUser->username = "BoondockTACE";
+            
+            
+            newUser->password = hash("jm2839365");
+
+           
+            printf("Username : %s ,Password: %d,Profile: %s \n", 
+            newUser->username, newUser->password ,newUser->profile);
+            
             break;
 
         default:
