@@ -22,7 +22,7 @@ OBJETOS  = hashtable.o prompt.o
 prompt: $(OBJETOS)
 	$(LINKEAR) $(OBJETOS) -o prompt
 
-prompt.o: prompt.c hashtable.h
+prompt.o: prompt.c
 	$(CC) prompt.c -o prompt.o
 
 hashtable.o: hashtable.c  hashtable.h user.h

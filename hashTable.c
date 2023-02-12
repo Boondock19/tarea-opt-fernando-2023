@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "hashTable.h"
 #include "user.h"
+
 
 /* 
     Definimos un tamaño maximo para la tabla de hash.
@@ -112,3 +114,47 @@ void printHashTable(HashTable* table) {
 
     printf("Fin de la tabla hash \n");
 }
+
+
+void insertHashTable(HashTable* table, char* key, User* value) {
+    HashItem* item = createHashItem(key,value);
+    int index = hash(item->key);
+
+    /* Verificamos que el index obtenido este vacio */
+
+    HashItem* tableBlock = table->items[index];
+
+    if (tableBlock == NULL) {
+
+        /* Verificamos que no este llena la tabla*/
+        if (table->count == table->size) {
+            printf("Tabla llena \n");
+            return;
+        }
+
+        /* Si esta vacio entonces insertamos */
+        table->items[index] = item;
+        table->count++;
+        /* TODO: HACER UPDATE DE UN USUARIO ? */
+        /* TODO : MANEJAR EL LAS COLISIONES????? */
+    }
+ 
+}
+
+  /* 
+        Funcion que retorna a un usuario dada una key de
+        la tabla de hash.
+    */
+
+    User* searchHashTable (HashTable* hashTable, char* key) {
+        int index = hash(key);
+        HashItem* item = hashTable->items[index];
+
+        /* Si no se encuentra a un item, entonces retornamos NULL*/
+        if (item == NULL) {
+            return NULL;
+        }
+
+        return item->value;
+}
+

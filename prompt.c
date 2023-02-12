@@ -26,6 +26,8 @@
 
 
 
+
+
 int define_state(int state , char *input) {
     if (strcmp(input, LOGIN) == 0) {
         state = LOGIN_STATE;
@@ -39,10 +41,29 @@ int define_state(int state , char *input) {
     return state;
 }
 
+/* 
+    Funcion para "Limpiar" el buffer al utilizar fgets
+    Ya que si el usuario ingresa mas caracteres de los 
+    que se pueden almacenar el loop hace "skips"
+    
+*/
+void clearfGetsBuffer(char *str) {
+     char *p;
+        if(p=strchr(str, '\n')){//check exist newline
+            *p = 0;
+        } else {
+            scanf("%*[^\n]");scanf("%*c");//clear upto newline
+        }
+}
+
 int main (int argc, char *argv[]) {
 
     int state = INITIAL_STATE;
     char state_input[10];
+
+    /* Creamos la tabla de hash inicial*/
+
+    HashTable *table = createHashTable(HASH_TABLE_SIZE);
 
     while (state != LEAVE_STATE) {
         
@@ -65,20 +86,59 @@ int main (int argc, char *argv[]) {
             break;
         case SIGNUP_STATE:
             printf("Signup\n");
-            fgets(state_input, 8, stdin);
-            printf("You entered: %s", state_input);
-            printf("Are they equal ? %d \n",strcmp(state_input, LEAVE));
-            state = define_state(state, state_input);
             User* newUser = (User *) malloc(sizeof(User));
-            newUser->username = "BoondockTACE";
-            
-            
-            newUser->password = hash("jm2839365");
+            newUser->username = (char *) malloc(sizeof(char) * 30);
+            newUser->password = (int) malloc(sizeof(int));
+            newUser->profile = (char *) malloc(sizeof(char) * 50);
+            printf("Enter your username: \n");
+            /* 
+                Todo backend tiene restricciones de infraestructura o de negocio
+                en este caso, diremos que el backend solo acepta 30 caracteres de username,
+                Se aceptaran 12 de password y 50 de profile.
+            */
+            char tempUsername[31];
+            char tempPassword[13];
+            char tempProfile[51];
 
+            fgets(tempUsername, 30 , stdin );
+
+           clearfGetsBuffer(tempUsername);
+           
+            printf("Enter your password: \n");
+            
+            fgets(tempPassword, 12 , stdin);
+            clearfGetsBuffer(tempPassword);
+            
+            printf("Enter your profile: \n");
+            fgets(tempProfile, 50 , stdin ); 
+            clearfGetsBuffer(tempProfile);
+
+            newUser->username = tempUsername;
+            newUser->password = hash(tempPassword);
+            newUser->profile = tempProfile;
            
             printf("Username : %s ,Password: %d,Profile: %s \n", 
             newUser->username, newUser->password ,newUser->profile);
             
+            /* Hacemos la insercion del nuevo usuario en la tabla hash*/
+            /* 
+                No tenemos definido si hay un valor definido a ser tomado 
+                para que sea key del par (key,value)
+
+                Tenemos dos opciones:
+
+                - Tomar el username como key, lo cual tiene sentido
+                porque no es posible que existan dos usuarios con el
+                mismo username en una base de datos.
+
+                - Tomar un valor autoincremental como key
+
+                de momento tomaremos el username como key 
+            
+            */
+            insertHashTable(table, newUser->username, newUser);
+            searchHashTable(table, newUser->username);
+            state = INITIAL_STATE;
             break;
 
         default:
@@ -89,3 +149,4 @@ int main (int argc, char *argv[]) {
     
     return 0;
 }
+
