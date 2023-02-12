@@ -67,6 +67,9 @@ int main (int argc, char *argv[]) {
 
     while (state != LEAVE_STATE) {
         
+        char tempUsername[31];
+        char tempPassword[13];
+
         switch (state)
         {
         case INITIAL_STATE:
@@ -79,10 +82,40 @@ int main (int argc, char *argv[]) {
             break;
         case LOGIN_STATE:
             printf("Login\n");
-            fgets(state_input, 8, stdin);
-            printf("You entered: %s", state_input);
-            printf("Are they equal ? %d \n",strcmp(state_input, SIGNUP));
-            state = define_state(state, state_input);
+           
+            
+            printf("Enter your username: \n");
+
+            fgets(tempUsername, 30 , stdin );
+
+            clearfGetsBuffer(tempUsername);
+           
+           
+            printf("Enter your password: \n");
+            
+            fgets(tempPassword, 12 , stdin);
+            clearfGetsBuffer(tempPassword);
+
+            
+            User *userFound = searchHashTable(table, tempUsername);
+
+            if (userFound != NULL) {
+                printf("FOUND USER Username : %s ,Password: %d,Profile: %s \n",
+                userFound->username, userFound->password ,userFound->profile);
+
+                int hashedPassword = hash(tempPassword);
+                if(hashedPassword == userFound->password) {
+                    printf("Password is correct lets print all tweets\n");
+                    printf("WHAT’S HAPPENING? \n");
+                } else {
+                    printf("Password is incorrect\n");
+                }
+
+            } else {
+                printf("User not found\n");
+            }
+            
+
             break;
         case SIGNUP_STATE:
             printf("Signup\n");
@@ -96,8 +129,7 @@ int main (int argc, char *argv[]) {
                 en este caso, diremos que el backend solo acepta 30 caracteres de username,
                 Se aceptaran 12 de password y 50 de profile.
             */
-            char tempUsername[31];
-            char tempPassword[13];
+            
             char tempProfile[51];
 
             fgets(tempUsername, 30 , stdin );
@@ -116,10 +148,7 @@ int main (int argc, char *argv[]) {
             newUser->username = tempUsername;
             newUser->password = hash(tempPassword);
             newUser->profile = tempProfile;
-           
-            printf("Username : %s ,Password: %d,Profile: %s \n", 
-            newUser->username, newUser->password ,newUser->profile);
-            
+                      
             /* Hacemos la insercion del nuevo usuario en la tabla hash*/
             /* 
                 No tenemos definido si hay un valor definido a ser tomado 
@@ -136,8 +165,11 @@ int main (int argc, char *argv[]) {
                 de momento tomaremos el username como key 
             
             */
+
             insertHashTable(table, newUser->username, newUser);
-            searchHashTable(table, newUser->username);
+
+           
+
             state = INITIAL_STATE;
             break;
 

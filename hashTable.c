@@ -32,32 +32,6 @@
  }
 
 
- /* 
-    Estructura de un item de la tabla hash
-    Debe ser un par de la forma (key, value)
-    donde value es un tipo de dato de tipo
-    User.	
- */
-
-typedef struct hashTableItem {
-    char *key;
-    User *value;
-} HashItem;
-
-
-/* 
-    Definimos a la tabla hash
-    donde items es un arreglo de apuntadores a items de la tabla
-    size es el tamaño de la tabla
-    count es el numero de elementos en la tabla
-*/
-
-typedef struct hashTable {
-    HashItem** items;
-    int size;
-    int count;
-} HashTable;
-
 
 /* 
     Funcion para crear un item de la tabla hash

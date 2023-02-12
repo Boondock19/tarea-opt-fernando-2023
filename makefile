@@ -25,7 +25,7 @@ prompt: $(OBJETOS)
 prompt.o: prompt.c
 	$(CC) prompt.c -o prompt.o
 
-hashtable.o: hashtable.c  hashtable.h user.h
+hashtable.o: hashtable.c hashtable.h
 	$(CC) hashtable.c -o hashtable.o
 
 clean:

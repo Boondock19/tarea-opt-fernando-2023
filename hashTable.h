@@ -42,8 +42,7 @@ typedef struct hashTable {
 
  */
 
- long hash(char *str) {}
-
+ long hash(char *str);
 
  /* 
     Funcion para crear un item de la tabla hash
@@ -51,7 +50,7 @@ typedef struct hashTable {
     value de tipo User.
 */
 
-HashItem* createHashItem(char* key,User* value) {}
+HashItem* createHashItem(char* key,User* value); 
 
 
 /*
@@ -63,23 +62,23 @@ HashItem* createHashItem(char* key,User* value) {}
 
 */
 
-HashTable* createHashTable(int size) {}
+HashTable* createHashTable(int size); 
 
 /* 
     Funcion para poder debbugear la tabla de hash
     Imprime el valor de cada item de la tabla
 */
 
-void printHashTable(HashTable* table) {}
+void printHashTable(HashTable* table);
 
 
-void insertHashTable(HashTable* table, char* key, User* value) {}
+void insertHashTable(HashTable* table, char* key, User* value);
 
   /* 
         Funcion que retorna a un usuario dada una key de
         la tabla de hash.
     */
 
- User* searchHashTable (HashTable* hashTable, char* key) {}
+ User* searchHashTable (HashTable* hashTable, char* key);
 
 #endif
