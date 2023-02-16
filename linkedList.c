@@ -5,17 +5,7 @@
 #include "linkedList.h"
 
 
-/* 
-    Metodo para crear un espacio de memoria para un apuntador
-    a lista enlazada/nodo.
-*/
 
-node createNode() {
-    node temp;
-    temp = (node)malloc(sizeof(LinkedList));
-    temp->next = NULL; 
-    return temp;
-}
 
 /* 
     Funcion para agregar un nodo a la lista enlazada.
@@ -23,36 +13,37 @@ node createNode() {
     almacenado en el nodo.
 */
 
-node insertNode(node head,void *data) {
-    node temp,p;
-    temp = createNode();
-    temp->data = data;
-    /* Si la lista esta vacia entonces lo agregamos directamente */
-    if(head == NULL) {
-        head = temp;
-    } else {
-        /* Recorremos la lista hasta el final para poder 
-        agregar el nuevo nodo al final de la lista.
-        */
-        p = head;
-        while(p->next != NULL ) {
-            p = p->next;
-         }
-        p->next = temp;
-    }
 
-    return head;
+
+void insertNode(Node **headRef, Tweet *data) {
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    Node *last = *headRef;
+    newNode->data = data;
+    newNode->next = NULL;
+
+   if (*headRef == NULL) {
+    *headRef = newNode;
+    return;
+   }
+
+   while (last->next != NULL) {
+    last = last->next;
+   }
+
+    last->next = newNode;
+    return;
 }
 
 
-void printList(node head) {
-    node p;
-    p = head;
-    while(p != NULL) {
-        printf("%s", (char *)p->data);
-        p = p->next;
+
+void printLinkedList(Node* node) {
+    while (node != NULL) {
+        printf("User:  %s, date: %s , text: %s", node->data->user->username,ctime(&node->data->date), node->data->text);
+        node = node->next;
     }
-}
+};
+
+
 
 
 

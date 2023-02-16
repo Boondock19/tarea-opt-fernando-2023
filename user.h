@@ -1,7 +1,11 @@
 #ifndef USER_H
 #define USER_H
 
+
 #include "linkedList.h"
+#include "tweet.h"
+
+
 /* 
     Estructura general de un Usuario
     username: nombre de usuario
@@ -15,8 +19,8 @@ typedef struct user{
     char *username;
     int password;
     char *profile;
-    LinkedList *following;
-    LinkedList *tweets;
+    struct node *following;
+    struct node *tweets;
 } User;
 
 #endif

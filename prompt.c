@@ -183,18 +183,18 @@ int main (int argc, char *argv[]) {
                         printf("Tweet: %s , Date: %s , User: %s \n", newTweet->text, ctime(&newTweet->date), newTweet->user->username);
                         
                         /* head */
-                        /* 
-                        node *head = userFound->tweets;
+                        
+                        Node* head = userFound->tweets;
 
                         printf("Antes de insertar : \n");
-                        printList(head);
-                        */
+                        printLinkedList(head);
+                        
                         /* Lo agregamos a la lista de tweets */
-                        /* 
-                        insertNode(head, newTweet);
+                        
+                        insertNode(&head, newTweet);
                         printf("Despues de insertar : \n");
-                        printList(head);
-                        */
+                        printLinkedList(head);
+                        
                         /* SALTAR a state en login_state ??*/
                         break;
                     
@@ -251,9 +251,13 @@ int main (int argc, char *argv[]) {
             fgets(tempProfile, 50 , stdin ); 
             clearfGetsBuffer(tempProfile);
 
+            Node* headTweets = NULL;
+            Node* headFollowing = NULL;
             newUser->username = tempUsername;
             newUser->password = hash(tempPassword);
             newUser->profile = tempProfile;
+            newUser->tweets = headTweets;
+            newUser->following = headFollowing;
                       
             /* Hacemos la insercion del nuevo usuario en la tabla hash*/
             /* 

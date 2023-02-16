@@ -1,6 +1,8 @@
 #ifndef  LINKEDLIST_H
 #define  LINKEDLIST_H
 
+#include "tweet.h"
+
 
 /* 
     Debemos usar las listas enlazadas para
@@ -18,24 +20,14 @@
 
 */
 
-typedef struct linkedList {
-    void *data;
-    struct LinkedList *next;
+typedef struct node {
+    Tweet *data;
+    struct node *next;
 
-} LinkedList;
+} Node;
 
+void printLinkedList(Node *head);
 
-/* 
-    Definicion de la estructura de nodo para una lista enlazada
-    Basicamente es un apuntador a la lista enlazada
-*/
-
-typedef struct linkedList *node;
-
-node createNode();
-
-node insertNode(node head,void *data);
-
-void printList(node head);
+void insertNode(Node **head, Tweet *data);
 
 #endif

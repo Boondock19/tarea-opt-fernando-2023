@@ -28,7 +28,7 @@ prompt.o: prompt.c
 hashtable.o: hashtable.c hashtable.h linkedList.h 
 	$(CC) hashtable.c -o hashtable.o
 
-linkedList.o: linkedList.c linkedList.h
+linkedList.o: linkedList.c linkedList.h 
 	$(CC) linkedList.c -o linkedList.o
 
 clean:

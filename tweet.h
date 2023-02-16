@@ -12,7 +12,7 @@
 */
 
 typedef struct tweet {
-    User *user;
+   struct user *user;
     time_t date;
     char *text;
 } Tweet ;
