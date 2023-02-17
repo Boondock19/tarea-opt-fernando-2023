@@ -15,7 +15,7 @@
 
 
 
-void insertNode(Node **headRef, Tweet *data) {
+void insertNode(Node **headRef, void *data) {
     Node *newNode = (Node *)malloc(sizeof(Node));
     Node *last = *headRef;
     newNode->data = data;
@@ -36,9 +36,16 @@ void insertNode(Node **headRef, Tweet *data) {
 
 
 
-void printLinkedList(Node* node) {
+void printLinkedList(Node* node,int type) {
     while (node != NULL) {
-        printf("User:  %s, date: %s , text: %s", node->data->user->username,ctime(&node->data->date), node->data->text);
+        void *data = node->data;
+        if (type == 1) {
+            Tweet *tweet = (Tweet *)data;
+            printf("User:  %s, date: %s , text: %s \n", tweet->user->username,ctime(&tweet->date), tweet->text);
+        } else if (type == 2) {
+            User *user = (User *)data;
+            printf("User:  %s\n", user->username);
+        }
         node = node->next;
     }
 };

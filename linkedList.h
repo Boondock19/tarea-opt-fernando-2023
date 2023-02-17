@@ -21,13 +21,13 @@
 */
 
 typedef struct node {
-    Tweet *data;
+    void *data;
     struct node *next;
 
 } Node;
 
-void printLinkedList(Node *head);
+void printLinkedList(Node *head,int type);
 
-void insertNode(Node **head, Tweet *data);
+void insertNode(Node **head, void *data);
 
 #endif

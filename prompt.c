@@ -187,13 +187,13 @@ int main (int argc, char *argv[]) {
                         Node* head = userFound->tweets;
 
                         printf("Antes de insertar : \n");
-                        printLinkedList(head);
+                        printLinkedList(head,1);
                         
                         /* Lo agregamos a la lista de tweets */
                         
                         insertNode(&head, newTweet);
                         printf("Despues de insertar : \n");
-                        printLinkedList(head);
+                        printLinkedList(head,1);
                         
                         /* SALTAR a state en login_state ??*/
                         break;
