@@ -30,4 +30,6 @@ void printLinkedList(Node *head,int type);
 
 void insertNode(Node **head, void *data);
 
+int countNodes(Node *head);
+
 #endif

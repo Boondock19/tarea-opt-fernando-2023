@@ -17,7 +17,7 @@
 
 typedef struct user{
     char *username;
-    int password;
+    int  password;
     char *profile;
     struct node *following;
     struct node *tweets;

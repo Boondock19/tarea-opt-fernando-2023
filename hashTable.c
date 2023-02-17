@@ -27,7 +27,7 @@
     for (int j = 0; str[j]; j++ ) {
         i += str[j];
     }
-
+    printf("Valor del Hash: %ld en hash directamente \n", i % HASH_TABLE_SIZE);
     return i % HASH_TABLE_SIZE;
  }
 
@@ -81,8 +81,8 @@ void printHashTable(HashTable* table) {
 
     for (int i = 0 ; i < table->size; i++) {
         if (table->items[i] != NULL) {
-            printf("Key: %s, User: username :%s , password: %d, profile: %s" , table->items[i]->key,
-            table->items[i]->value->username, table->items[i]->value->password, table->items[i]->value->profile);
+            printf("Key: %s, Index %d , User: username :%s , password: %d, profile: %s \n" , table->items[i]->key,
+            i,table->items[i]->value->username, table->items[i]->value->password, table->items[i]->value->profile);
         }
     }
 
@@ -92,8 +92,9 @@ void printHashTable(HashTable* table) {
 
 void insertHashTable(HashTable* table, char* key, User* value) {
     HashItem* item = createHashItem(key,value);
+    
     int index = hash(item->key);
-
+    printf("Valor del Hash: %ld en insertHashTable \n", hash(item->key));
     /* Verificamos que el index obtenido este vacio */
 
     HashItem* tableBlock = table->items[index];

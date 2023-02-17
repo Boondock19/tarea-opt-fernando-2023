@@ -95,8 +95,8 @@ int main (int argc, char *argv[]) {
 
     while (state != LEAVE_STATE) {
         
-        char tempUsername[31];
-        char tempPassword[13];
+        char *tempUsername = (char *) malloc(sizeof(char) * 31);
+        char *tempPassword = (char *) malloc(sizeof(char) * 13);
         
         /* 
 
@@ -151,6 +151,7 @@ int main (int argc, char *argv[]) {
 
                 int hashedPassword = hash(tempPassword);
                 if(hashedPassword == userFound->password) {
+                    timeline:
                     printf("Password is correct lets print all tweets\n");
                     printf("WHAT’S HAPPENING? \n");
                     fgets(loginInput,sizeof(loginInput),stdin);
@@ -196,17 +197,47 @@ int main (int argc, char *argv[]) {
                         printLinkedList(head,1);
                         
                         /* SALTAR a state en login_state ??*/
+                        goto timeline;
                         break;
                     
-                    case (GET_PROFILE_STATE):
+                    case (GET_PROFILE_STATE): 
                         /* code */
-                        break;
-                    
-                    case (FOLLOW_STATE):
-                        /* code */
+                        printf("Write the username of the person you are looking for\n");
+
+                        char profileUsername[31];
+                        char profileInput[7];
+
+                        fgets(profileUsername, 30 , stdin );
+                        clearfGetsBuffer(profileUsername);
+                        User *userProfile = searchHashTable(table, profileUsername);
+                        printf("Ingresaste: %s \n", profileUsername);
+
+                        if (userProfile == NULL) {
+                            printf("User not found\n");
+                            goto timeline;
+                        }
+                        /* Show profile of user found */
+                        printf("Profile of : %s found\n", userProfile->username);
+                        printf("We are user : %s \n", userFound->username);
+                        printf("Follow  or logout? \n");
+                        
+                        fgets(profileInput,sizeof(loginInput),stdin);
+                        clearfGetsBuffer(profileInput);
+                        if (strcmp(profileInput, FOLLOW) == 0) {
+                            printf("Follow dasdad\n");
+                            /* Insertamos al usuario en la lista de following de userFound */
+                            Node *headFolliwing = userFound->following;
+                            printf("Antes de insertar : \n");
+                            insertNode(&headFolliwing, userProfile);
+                            printf("Despues de insertar : \n");
+                            printLinkedList(headFolliwing,2);
+                        } else if (strcmp(profileInput, LOGOUT) == 0) {
+                            printf("Logout dasdasd\n");
+                        }
                         break;
                     
                     case (LOGOUT_STATE):
+                        state = LEAVE_STATE;
                         break;
                     
                     default:
@@ -225,9 +256,9 @@ int main (int argc, char *argv[]) {
             break;
         case SIGNUP_STATE:
             printf("Signup\n");
-            User* newUser = (User *) malloc(sizeof(User));
+            User* newUser = (User *) calloc(1,sizeof(User));
             newUser->username = (char *) malloc(sizeof(char) * 30);
-            newUser->password = (int) malloc(sizeof(int));
+            newUser->password = (int) malloc(sizeof(int) * 12);
             newUser->profile = (char *) malloc(sizeof(char) * 50);
             printf("Enter your username: \n");
             /* 
@@ -236,7 +267,7 @@ int main (int argc, char *argv[]) {
                 Se aceptaran 12 de password y 50 de profile.
             */
             
-            char tempProfile[51];
+            char *tempProfile = (char *) malloc(sizeof(char) * 51);
 
             fgets(tempUsername, 30 , stdin );
 
@@ -275,10 +306,11 @@ int main (int argc, char *argv[]) {
                 de momento tomaremos el username como key 
             
             */
+          
 
             insertHashTable(table, newUser->username, newUser);
-
-           
+        
+            
 
             state = INITIAL_STATE;
             break;
