@@ -22,6 +22,9 @@ OBJETOS  = linkedList.o hashtable.o prompt.o
 prompt: $(OBJETOS)
 	$(LINKEAR) $(OBJETOS) -o prompt
 
+backend: hashtable.o linkedList.o
+	$(CC) hashtable.o linkedList.o
+
 prompt.o: prompt.c
 	$(CC) prompt.c -o prompt.o
 
@@ -33,4 +36,5 @@ linkedList.o: linkedList.c linkedList.h
 
 clean:
 	rm *.o prompt
+	
 	
