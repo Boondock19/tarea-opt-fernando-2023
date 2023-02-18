@@ -11,6 +11,8 @@
     username: nombre de usuario
     password: contraseña guardada con el hash
     profile: Pequeña descripción del usuario
+    following: Lista enlazada de usuarios a los que sigue
+    tweets: Lista enlazada de tweets del usuario
 
     Los 3 valores son strings pero guardados en apuntadores
  */

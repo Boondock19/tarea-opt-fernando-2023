@@ -109,7 +109,7 @@ void insertHashTable(HashTable* table, char* key, User* value) {
         table->items[index] = item;
         table->count++;
         /* TODO: HACER UPDATE DE UN USUARIO ? */
-        /* TODO : MANEJAR EL LAS COLISIONES????? */
+        /* TODO : MANEJAR  LAS COLISIONES????? */
     }
  
 }

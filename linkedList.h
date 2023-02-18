@@ -8,9 +8,7 @@
     Debemos usar las listas enlazadas para
     guardar a la lista de siguiendos de un user
     y adicionalmente para guardar los tweets dentro 
-    de un user. Eso quiere decir que tendremos dos tipos
-    de listas ya que C nos obliga a especificar el tipo
-    de dato al generar el struct de la lista enlazada.
+    de un user.
 
     Al investigar consegui que se puede utilizar el tipo void
     para almacenar cualquier tipo de dato en la lista, pero

@@ -35,6 +35,11 @@ void insertNode(Node **headRef, void *data) {
 }
 
 
+/* 
+    Funcion utilizada para imprimir una lista enlazada
+    la variable type sirve para saber que tipo de dato
+    es y poder imprimirlo correctamente.
+*/
 
 void printLinkedList(Node* node,int type) {
     if (node == NULL) {
@@ -52,6 +57,10 @@ void printLinkedList(Node* node,int type) {
         node = node->next;
     }
 };
+
+/*  
+    Funcion para contar lo nodos de una lista enlazada
+*/
 
 int countNodes(Node *head) {
     int count = 0;

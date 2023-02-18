@@ -71,6 +71,11 @@ HashTable* createHashTable(int size);
 
 void printHashTable(HashTable* table);
 
+/*
+    Funcion para insertar un item en la tabla de hash
+    toma como parametros la tabla, la key y el valor
+    a insertar.
+*/
 
 void insertHashTable(HashTable* table, char* key, User* value);
 

@@ -17,6 +17,11 @@
     2 signup state
     3 leave state
 */
+/* 
+    Las siguiente definiciones de valor
+    son utilizados como flags para los estados
+    del programa iterativo, cada nombre es explicativo
+*/
 
 #define INITIAL_STATE 0
 #define LOGIN_STATE 1
@@ -37,6 +42,11 @@
 #define FOLLOW "follow"
 #define LOGOUT "logout"
 
+/* 
+    Funcion para definir el estado del programa
+    segun input del usuario antes de hacer login
+*/
+
 int defineState(int state , char *input) {
       if (strcmp(input, LOGIN) == 0) {
         state = LOGIN_STATE;
@@ -44,11 +54,14 @@ int defineState(int state , char *input) {
         state = SIGNUP_STATE;
     } else if (strcmp(input, LEAVE) == 0) {
         state = LEAVE_STATE;
-    } /* else {
-        state = INITIAL_STATE;
-    } /*/
+    } 
     return state;
 }
+
+/* 
+    Funcion para definir el estado del programa
+    segun input del usuario despues de hacer login
+*/
 
 int defineLoginInput(int loginState,char *input) {
 
@@ -77,10 +90,10 @@ int defineLoginInput(int loginState,char *input) {
 */
 void clearfGetsBuffer(char *str) {
      char *p;
-        if(p=strchr(str, '\n')){//check exist newline
+        if(p=strchr(str, '\n')){
             *p = 0;
         } else {
-            scanf("%*[^\n]");scanf("%*c");//clear upto newline
+            scanf("%*[^\n]");scanf("%*c");
         }
 }
 
@@ -96,31 +109,22 @@ int main (int argc, char *argv[]) {
 
     HashTable *table = createHashTable(HASH_TABLE_SIZE);
 
+    /* 
+        Inicio del programa iterativo
+    */
+
     while (state != LEAVE_STATE) {
         
         char *tempUsername = (char *) malloc(sizeof(char) * 31);
         char *tempPassword = (char *) malloc(sizeof(char) * 13);
         
-        /* 
-
-        time_t tempDate1;
-        time_t tempDate2 = time(NULL);
-
-        
-        printf("Date2: %s , %d \n", ctime(&tempDate2), tempDate2);
-        sleep(10);
-        tempDate1 = time(NULL);
-        printf("Date1: %s , %d \n", ctime(&tempDate1), tempDate1);
-
-        if (tempDate2 < tempDate1 ) {
-            printf("Date2 is less than Date1 \n");
-        } else {
-            printf("Date2 is greater than Date1 \n");
-        }
-        */
 
         switch (state)
         {
+            /* 
+                Estado inicial del programa
+                El usuario puede elegir entre login, signup o leave
+            */
         case INITIAL_STATE:
             printf("DON’T MISS WHAT’S HAPPENING! LOGIN, SIGNUP OR LEAVE\n");
             fgets(stateInput, 8, stdin);
@@ -128,7 +132,9 @@ int main (int argc, char *argv[]) {
             break;
         case LOGIN_STATE:
            
-            
+            /* 
+                El usuario debe hacer login
+            */ 
             printf("USERNAME: \n");
 
             fgets(tempUsername, 30 , stdin );
@@ -167,9 +173,9 @@ int main (int argc, char *argv[]) {
                         printf("Write your tweet: \n");
                         /* Creamos espacio para el tweet y el texto */
                         Tweet *newTweet = (Tweet *) malloc(sizeof(Tweet)); 
-                        printf("SI crea bien el espacio para newTweet \n");
+                        
                         char *text = (char *) malloc(sizeof(char) * 280);
-                        printf("SI crea bien el espacio para text \n");
+                       
                         fgets(text, sizeof(char) * 280, stdin);
                         
                      
@@ -180,27 +186,24 @@ int main (int argc, char *argv[]) {
                         newTweet->text = text;
                         
                         
-                        
-                        /* head */
-                        
-                       /* Node* head = userFound->tweets; */
+        
 
-                        printf("Antes de insertar : \n");
+                        
                         printLinkedList(head,1);
                         
                         /* Lo agregamos a la lista de tweets */
                         
                         insertNode(&head, newTweet);
                         userFound->tweets = head;
-                        printf("Despues de insertar : \n");
+                        
                         printLinkedList(head,1);
                         
-                        /* SALTAR a state en login_state ??*/
+                        
                         goto timeline;
                         break;
                     
                     case (GET_PROFILE_STATE): 
-                        /* code */
+                       
                         printf("Write the username of the person you are looking for\n");
 
                         char *profileUsername = (char *) malloc(sizeof(char) * 31);
@@ -215,18 +218,13 @@ int main (int argc, char *argv[]) {
                             goto timeline;
                         }
                         /* Show profile of user found */
-                        /* 
-                        printf("Profile of : %s found\n", userProfile->username);
-                        printf("We are user : %s \n", userFound->username);
-                        printf("Follow   \n");
-                        */
+                    
                         /* Se imprime la lista de tweets del perfil del usuario */
                         printf("Profile of : %s found\n", userProfile->username);
                         printf("Profile : %s \n", userProfile->profile);
                         Node* headTweets = userProfile->tweets;
                         
                         printLinkedList(headTweets, 1);
-                        printf("Tuvo que ocurrir la impresion de la lista de tweets \n");
                         fgets(profileInput,sizeof(loginInput),stdin);
                         clearfGetsBuffer(profileInput);
                         if (strcmp(profileInput, FOLLOW) == 0) {
@@ -235,6 +233,7 @@ int main (int argc, char *argv[]) {
                             Node *headFolliwing = userFound->following;
                     
                             insertNode(&headFolliwing, userProfile);
+                            userFound->following = headFolliwing;
                             
                             
                         }
