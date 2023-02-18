@@ -27,7 +27,6 @@
     for (int j = 0; str[j]; j++ ) {
         i += str[j];
     }
-    printf("Valor del Hash: %ld en hash directamente \n", i % HASH_TABLE_SIZE);
     return i % HASH_TABLE_SIZE;
  }
 
@@ -94,7 +93,6 @@ void insertHashTable(HashTable* table, char* key, User* value) {
     HashItem* item = createHashItem(key,value);
     
     int index = hash(item->key);
-    printf("Valor del Hash: %ld en insertHashTable \n", hash(item->key));
     /* Verificamos que el index obtenido este vacio */
 
     HashItem* tableBlock = table->items[index];

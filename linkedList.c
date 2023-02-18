@@ -37,6 +37,9 @@ void insertNode(Node **headRef, void *data) {
 
 
 void printLinkedList(Node* node,int type) {
+    if (node == NULL) {
+        printf("List is empty \n");
+        }
     while (node != NULL) {
         void *data = node->data;
         if (type == 1) {

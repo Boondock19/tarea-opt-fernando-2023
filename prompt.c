@@ -27,15 +27,15 @@
 #define SIGNUP "signup\n"
 #define LEAVE "leave\n"
 
-#define NEW_TWEET_STATE 0
+#define NEW_TWEET_STATE 4
 #define GET_PROFILE_STATE 1
 #define FOLLOW_STATE 2
 #define LOGOUT_STATE 3
 
 #define NEW_TWEET "+\n"
 #define GET_PROFILE "@\n"
-#define FOLLOW "follow\n"
-#define LOGOUT "logout\n"
+#define FOLLOW "follow"
+#define LOGOUT "logout"
 
 int defineState(int state , char *input) {
       if (strcmp(input, LOGIN) == 0) {
@@ -60,6 +60,8 @@ int defineLoginInput(int loginState,char *input) {
         loginState = FOLLOW_STATE;
     } else if (strcmp(input, LOGOUT) == 0) {
         loginState = LOGOUT_STATE;
+    } else {
+        return 0;
     }
     return loginState;
       
@@ -88,6 +90,7 @@ int main (int argc, char *argv[]) {
     int loginInputState;
     char stateInput[10];
     char loginInput[7];
+    char profileInput[10];
 
     /* Creamos la tabla de hash inicial*/
 
@@ -119,25 +122,21 @@ int main (int argc, char *argv[]) {
         switch (state)
         {
         case INITIAL_STATE:
-            printf("Welcome to the prompt\n");
             printf("DON’T MISS WHAT’S HAPPENING! LOGIN, SIGNUP OR LEAVE\n");
             fgets(stateInput, 8, stdin);
-            printf("You entered: %s", stateInput);
-            printf("Are they equal ? %d \n",strcmp(stateInput, LOGIN));
             state = defineState(state, stateInput);
             break;
         case LOGIN_STATE:
-            printf("Login\n");
            
             
-            printf("Enter your username: \n");
+            printf("USERNAME: \n");
 
             fgets(tempUsername, 30 , stdin );
 
             clearfGetsBuffer(tempUsername);
            
            
-            printf("Enter your password: \n");
+            printf("PASSWORD: \n");
             
             fgets(tempPassword, 12 , stdin);
             clearfGetsBuffer(tempPassword);
@@ -146,13 +145,16 @@ int main (int argc, char *argv[]) {
             User *userFound = searchHashTable(table, tempUsername);
 
             if (userFound != NULL) {
-                printf("FOUND USER Username : %s ,Password: %d,Profile: %s \n",
-                userFound->username, userFound->password ,userFound->profile);
+                printf("User found \n");
+              
+
+                Node *head = userFound->tweets;
 
                 int hashedPassword = hash(tempPassword);
                 if(hashedPassword == userFound->password) {
                     timeline:
-                    printf("Password is correct lets print all tweets\n");
+                    printf("Profile : %s \n", userFound->profile);
+                    printLinkedList(head,1);
                     printf("WHAT’S HAPPENING? \n");
                     fgets(loginInput,sizeof(loginInput),stdin);
                     /* Definimos que accion quiere tomar el usuario .*/
@@ -170,22 +172,18 @@ int main (int argc, char *argv[]) {
                         printf("SI crea bien el espacio para text \n");
                         fgets(text, sizeof(char) * 280, stdin);
                         
-                        /* 
-                        printf("Tweet: %s \n", newTweet->text);
-                        printf(" Date: %s \n", ctime(&newTweet->date));
-                        printf(" User: %s \n", newTweet->user->username);
-                        */
+                     
                        
                        
                         newTweet->user = userFound;
                         newTweet->date = time(NULL);
                         newTweet->text = text;
                         
-                        printf("Tweet: %s , Date: %s , User: %s \n", newTweet->text, ctime(&newTweet->date), newTweet->user->username);
+                        
                         
                         /* head */
                         
-                        Node* head = userFound->tweets;
+                       /* Node* head = userFound->tweets; */
 
                         printf("Antes de insertar : \n");
                         printLinkedList(head,1);
@@ -193,6 +191,7 @@ int main (int argc, char *argv[]) {
                         /* Lo agregamos a la lista de tweets */
                         
                         insertNode(&head, newTweet);
+                        userFound->tweets = head;
                         printf("Despues de insertar : \n");
                         printLinkedList(head,1);
                         
@@ -204,43 +203,51 @@ int main (int argc, char *argv[]) {
                         /* code */
                         printf("Write the username of the person you are looking for\n");
 
-                        char profileUsername[31];
-                        char profileInput[7];
+                        char *profileUsername = (char *) malloc(sizeof(char) * 31);
+                        
 
                         fgets(profileUsername, 30 , stdin );
                         clearfGetsBuffer(profileUsername);
                         User *userProfile = searchHashTable(table, profileUsername);
-                        printf("Ingresaste: %s \n", profileUsername);
 
                         if (userProfile == NULL) {
                             printf("User not found\n");
                             goto timeline;
                         }
                         /* Show profile of user found */
+                        /* 
                         printf("Profile of : %s found\n", userProfile->username);
                         printf("We are user : %s \n", userFound->username);
-                        printf("Follow  or logout? \n");
+                        printf("Follow   \n");
+                        */
+                        /* Se imprime la lista de tweets del perfil del usuario */
+                        printf("Profile of : %s found\n", userProfile->username);
+                        printf("Profile : %s \n", userProfile->profile);
+                        Node* headTweets = userProfile->tweets;
                         
+                        printLinkedList(headTweets, 1);
+                        printf("Tuvo que ocurrir la impresion de la lista de tweets \n");
                         fgets(profileInput,sizeof(loginInput),stdin);
                         clearfGetsBuffer(profileInput);
                         if (strcmp(profileInput, FOLLOW) == 0) {
-                            printf("Follow dasdad\n");
+                           
                             /* Insertamos al usuario en la lista de following de userFound */
                             Node *headFolliwing = userFound->following;
-                            printf("Antes de insertar : \n");
+                    
                             insertNode(&headFolliwing, userProfile);
-                            printf("Despues de insertar : \n");
-                            printLinkedList(headFolliwing,2);
-                        } else if (strcmp(profileInput, LOGOUT) == 0) {
-                            printf("Logout dasdasd\n");
+                            
+                            
                         }
+                        goto timeline;
                         break;
                     
                     case (LOGOUT_STATE):
-                        state = LEAVE_STATE;
+                        state = INITIAL_STATE;
                         break;
                     
                     default:
+                        printf("Invalid input\n");
+                        goto timeline;
                         break;
                     }
                 } else {
@@ -252,15 +259,15 @@ int main (int argc, char *argv[]) {
                 printf("User not found\n");
             }
             
-
             break;
-        case SIGNUP_STATE:
-            printf("Signup\n");
+        case SIGNUP_STATE: ;
             User* newUser = (User *) calloc(1,sizeof(User));
             newUser->username = (char *) malloc(sizeof(char) * 30);
             newUser->password = (int) malloc(sizeof(int) * 12);
             newUser->profile = (char *) malloc(sizeof(char) * 50);
-            printf("Enter your username: \n");
+            newUser->tweets = (Node *) malloc(sizeof(Node));
+            newUser->following = (Node *) malloc(sizeof(Node));
+            printf("USERNAME: \n");
             /* 
                 Todo backend tiene restricciones de infraestructura o de negocio
                 en este caso, diremos que el backend solo acepta 30 caracteres de username,
@@ -273,22 +280,21 @@ int main (int argc, char *argv[]) {
 
            clearfGetsBuffer(tempUsername);
            
-            printf("Enter your password: \n");
+            printf("PASSWORD: \n");
             
             fgets(tempPassword, 12 , stdin);
             clearfGetsBuffer(tempPassword);
             
-            printf("Enter your profile: \n");
+            printf("PROFILE: \n");
             fgets(tempProfile, 50 , stdin ); 
             clearfGetsBuffer(tempProfile);
 
-            Node* headTweets = NULL;
-            Node* headFollowing = NULL;
             newUser->username = tempUsername;
             newUser->password = hash(tempPassword);
             newUser->profile = tempProfile;
-            newUser->tweets = headTweets;
-            newUser->following = headFollowing;
+            newUser->tweets = NULL;
+            newUser->following = NULL;
+
                       
             /* Hacemos la insercion del nuevo usuario en la tabla hash*/
             /* 
